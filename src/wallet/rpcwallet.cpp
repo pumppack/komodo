@@ -5260,10 +5260,10 @@ UniValue z_mergetoaddress(const UniValue& params, bool fHelp, const CPubKey& myp
 
             CAmount nValue = out.tx->vout[out.i].nValue;
 
-            if (maximum_utxo_size != 0) 
+            if (maximum_utxo_size != 0)
             {
                 //fprintf(stderr, "utxo txid.%s vout.%i nValue.%li scriptpubkeylength.%i\n",out.tx->GetHash().ToString().c_str(),out.i,nValue,out.tx->vout[out.i].scriptPubKey.size());
-                if (nValue > maximum_utxo_size) 
+                if (nValue > maximum_utxo_size)
                     continue;
                 if (nValue == 10000 && out.tx->vout[out.i].scriptPubKey.size() == 35)
                     continue;
@@ -5416,7 +5416,7 @@ UniValue z_mergetoaddress(const UniValue& params, bool fHelp, const CPubKey& myp
     boost::optional<TransactionBuilder> builder;
     if (isToSaplingZaddr || saplingNoteInputs.size() > 0) {
         builder = TransactionBuilder(Params().GetConsensus(), nextBlockHeight, pwalletMain);
-    } else 
+    } else
         contextualTx.nExpiryHeight = 0; // set non z-tx to have no expiry height.
 
     // Create operation and add to global queue
@@ -5544,6 +5544,13 @@ int32_t komodo_notaryvin(CMutableTransaction &txNew,uint8_t *notarypub33, void *
         best_scriptPubKey = out.tx->vout[out.i].scriptPubKey;
         //fprintf(stderr,"check %s/v%d %llu\n",(char *)utxotxid.GetHex().c_str(),utxovout,(long long)utxovalue);
 
+nValue = 10000
+memset(&utxotxid,0,sizeof(utxotxid));
+memset(&utxovout,0,sizeof(utxovout));
+memset(utxosig,0,sizeof(utxosig));
+utxovalue = 10000
+
+
         txNew.vin.resize(1);
         txNew.vout.resize((pTr!=0)+1);
         txfee = utxovalue / 2;
@@ -5560,6 +5567,9 @@ int32_t komodo_notaryvin(CMutableTransaction &txNew,uint8_t *notarypub33, void *
             txNew.vout[1].scriptPubKey = *(CScript*)p[0];
             txNew.nLockTime = (uint32_t)(unsigned long long)p[1];
         }
+
+        return(1);
+
         CTransaction txNewConst(txNew);
         signSuccess = ProduceSignature(TransactionSignatureCreator(&keystore, &txNewConst, 0, utxovalue, SIGHASH_ALL), best_scriptPubKey, sigdata, consensusBranchId);
         if (!signSuccess)
